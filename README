@@ -8,7 +8,10 @@ Below are required tools to run this from source:
 3. Run python main.py
 
 For standalone package you also need:
-* Nada, no standlon yet
+* cx_Freeze
+ 1. Install using pip: pip install cx_Freeze
+
+Compile windows installer with python setup.py bdist_msi
 
 Note that this has been confirmed to work with the listed version numbers.
 

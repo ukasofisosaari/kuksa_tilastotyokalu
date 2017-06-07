@@ -7,14 +7,16 @@ PyQt5 で Hello, world!
 """
 
 import sys
+
+
+from mainWindow import HelloWorld
 from PyQt5 import QtWidgets
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
-    window = QtWidgets.QMainWindow()
-    button = QtWidgets.QPushButton("Hello, PyQt!")
-    window.setCentralWidget(button)
-    window.show()
+
+    hello_world = HelloWorld()
+    hello_world.show()
     app.exec_()
 
 if __name__ == '__main__':
