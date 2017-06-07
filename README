@@ -1,0 +1,14 @@
+Below are required tools to run this from source:
+* Python 3.5
+* PyQt5
+* Windows 10
+
+1. Install Python from an executable binary
+2. From command prompt on Windows run pip install PyQt5.
+3. Run python main.py
+
+For standalone package you also need:
+* Nada, no standlon yet
+
+Note that this has been confirmed to work with the listed version numbers.
+
