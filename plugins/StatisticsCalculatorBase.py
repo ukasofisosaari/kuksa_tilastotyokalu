@@ -2,6 +2,10 @@
 #-*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
 
+"""
+Note that any classes inherited from StatisticsCalculatorBase must have in the same python module a function called registerCalculatorPlugin.
+
+"""
 class StatisticsCalculatorBase(object):
     __metaclass__ = ABCMeta
 
@@ -10,6 +14,7 @@ class StatisticsCalculatorBase(object):
        self._name = plugin_name
 
     def getName(self):
+        print("Called Get Name")
         return self._name
 
     def _setDescription(self, description):
@@ -20,9 +25,6 @@ class StatisticsCalculatorBase(object):
 
     def loadExcelFile(self, excelfile):
         pass
-
-
-
 
     @abstractmethod
     def calculate_statistics(self, parameters=[]):

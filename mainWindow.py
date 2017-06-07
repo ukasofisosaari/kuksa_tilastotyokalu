@@ -7,7 +7,7 @@ from gui_statistics_selection import GUIStatisticsSelection
 
 class GUIStatisticsTool(QWidget):
     def __init__(self, parent=None):
-        super(GUIStatisticsTool, self).__init__(parent)
+        QWidget.__init__(self, parent)
 
 
 

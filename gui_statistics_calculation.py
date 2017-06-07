@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QVBoxLayout, QWidget, QLabel
 
 class GUIStatisticsCalculation(QWidget):
     def __init__(self, parent=None):
-        super(GUIStatisticsCalculation, self).__init__(parent)
+        QWidget.__init__(self, parent)
 
         main_layout = QVBoxLayout()
         label = QLabel("Tilastolaskimen parametrit")
