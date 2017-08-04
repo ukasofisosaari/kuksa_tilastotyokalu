@@ -11,20 +11,28 @@ class StatisticsCalculatorBase(object):
 
     def __init__(self, plugin_name):
 
-       self._name = plugin_name
+        self._name = plugin_name
+        self._description = ''
 
     def getName(self):
         print("Called Get Name")
         return self._name
 
     def _setDescription(self, description):
+        print("Called Set Description")
         self._description = description
 
     def getDescription(self):
+        print("Called Get Description")
         return self._description
 
+    def return_parameters(self):
+        return []
+
+
+    ##TODO: Insert excel file handling here
     def loadExcelFile(self, excelfile):
-        pass
+        print(excelfile)
 
     @abstractmethod
     def calculate_statistics(self, parameters=[]):
