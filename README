@@ -7,6 +7,11 @@ Below are required tools to run this from source:
 2. From command prompt on Windows run pip install PyQt5.
 3. Run python main.py
 
+From pip:
+pyqt5
+cx_freeze
+xlrd
+
 For standalone package you also need:
 * cx_Freeze
  1. Install using pip: pip install cx_Freeze

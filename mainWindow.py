@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 import sys
 import os
+import webbrowser
 
 from PyQt5.QtWidgets import QHBoxLayout, QWidget, QFileDialog
 
@@ -46,9 +47,11 @@ class GUIStatisticsTool(QWidget):
         excel_file = self._statistics_calculation_w.get_excel_file()
         self._calculator_plugin.loadExcelFile(excel_file)
         if self._calculator_plugin.calculate_statistics():
-            report_file = QFileDialog.getSaveFileName(self, 'Tallenna raportti tiedosto')[0] + '.html'
+            report_file = QFileDialog.getSaveFileName(self, 'Tallenna raportti tiedosto')[0]
             print(report_file)
             self._calculator_plugin.saveReport(report_file)
+
+            webbrowser.open(report_file+'.html')
 
 
 

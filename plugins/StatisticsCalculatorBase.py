@@ -16,6 +16,9 @@ class StatisticsCalculatorBase(object):
         with open(report_template, 'r') as template_file:
             self._template_file_content = template_file.read().replace('\n', '')
 
+        #Holds raw data
+        self._data = ''
+
     def getName(self):
         print("Called Get Name")
         return self._name
@@ -35,8 +38,12 @@ class StatisticsCalculatorBase(object):
         self._template_file_content = self._template_file_content.replace(placeholder, data)
 
     def saveReport(self, report_location):
-        with open(report_location, "w") as report_file:
+        with open(report_location+'.html', "w") as report_file:
             report_file.write(self._template_file_content)
+        self._template_file_content=''
+        with open(report_location+'.csv', "w") as data_file:
+            data_file.write(self._data)
+        self._data=''
 
 
     ##TODO: Insert excel file handling here

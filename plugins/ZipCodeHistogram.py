@@ -68,6 +68,7 @@ class ZipCodeHistogram(StatisticsCalculatorBase):
             first_age_group.append(sorted_histogram[i][1][0])
             second_age_group.append(sorted_histogram[i][1][1])
             third_age_group.append(sorted_histogram[i][1][2])
+
         zips_s = ','.join("'{0}'".format(str(x)) for x in zips)
         self._replacePlaceholder("<ZIPS>", zips_s)
         first_s = ','.join(str(x) for x in first_age_group)
@@ -76,6 +77,10 @@ class ZipCodeHistogram(StatisticsCalculatorBase):
         self._replacePlaceholder("<SECOND AGE GROUP>", second_s)
         third_s = ','.join(str(x) for x in third_age_group)
         self._replacePlaceholder("<THIRD AGE GROUP>", third_s)
+
+        self._data = ';Postinumer;Alle 15 vuotiaat; 15-22 vuotiaat; Yli 22 vuotiaat;\n'
+        for i in range(len(zips)):
+            self._data += ';{0};{1};{2};{3};\n'.format(str(zips[i]), str(first_age_group[i]), str(second_age_group[i]), str(third_age_group[i]))
         return True
 
 
@@ -141,6 +146,10 @@ class ZipCodeHistogram(StatisticsCalculatorBase):
                 parsecommands = parseorder[j]
                 parsestring = parsecommands[0]
                 parseside = parsecommands[1]
+                print("again")
+                print(parsecommands)
+                print(parsestring)
+                print(si)
                 sp = si.split(parsestring, 1)
                 si = sp[parseside]
             out[i] = si
