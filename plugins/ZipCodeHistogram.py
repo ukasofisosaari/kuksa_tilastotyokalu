@@ -9,7 +9,7 @@ class ZipCodeHistogram(StatisticsCalculatorBase):
     Test Statistics class
     """
     def __init__(self):
-        StatisticsCalculatorBase.__init__(self, "Zip Code Histogram")
+        StatisticsCalculatorBase.__init__(self, "Zip Code Histogram", "plugins/ZipCodeHistogram/ZipCodeHistogram.html")
 
     def calculate_statistics(self, parameters=[]):
         print("Lets start calculating")
@@ -59,9 +59,26 @@ class ZipCodeHistogram(StatisticsCalculatorBase):
             histogram.append([zips[i], hist[i]])
 
         sorted_histogram = sorted(histogram, key=lambda zipcode: zipcode[0])
-
+        zips = []
+        first_age_group = []
+        second_age_group = []
+        third_age_group = []
         for i in range(len(sorted_histogram)):
-            print(sorted_histogram[i])
+            zips.append(sorted_histogram[i][0])
+            first_age_group.append(sorted_histogram[i][1][0])
+            second_age_group.append(sorted_histogram[i][1][1])
+            third_age_group.append(sorted_histogram[i][1][2])
+        zips_s = ','.join("'{0}'".format(str(x)) for x in zips)
+        self._replacePlaceholder("<ZIPS>", zips_s)
+        first_s = ','.join(str(x) for x in first_age_group)
+        self._replacePlaceholder("<FIRST AGE GROUP>", first_s)
+        second_s = ','.join(str(x) for x in second_age_group)
+        self._replacePlaceholder("<SECOND AGE GROUP>", second_s)
+        third_s = ','.join(str(x) for x in third_age_group)
+        self._replacePlaceholder("<THIRD AGE GROUP>", third_s)
+        return True
+
+
 
     # ----------------------------------------------------------------------
     def _initialize_age_bins(self, age_bins):

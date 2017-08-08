@@ -2,7 +2,6 @@
 #-*- coding: utf-8 -*-
 
 from PyQt5.QtWidgets import QVBoxLayout, QWidget, QLabel, QPushButton, QFileDialog
-from PyQt5.QtCore import pyqtSignal
 
 
 class GUIStatisticsCalculation(QWidget):

@@ -3,7 +3,7 @@
 import sys
 import os
 
-from PyQt5.QtWidgets import QHBoxLayout, QWidget
+from PyQt5.QtWidgets import QHBoxLayout, QWidget, QFileDialog
 
 from gui_statistics_calculation import GUIStatisticsCalculation
 from gui_statistics_selection import GUIStatisticsSelection
@@ -45,7 +45,10 @@ class GUIStatisticsTool(QWidget):
     def calculate(self):
         excel_file = self._statistics_calculation_w.get_excel_file()
         self._calculator_plugin.loadExcelFile(excel_file)
-        self._calculator_plugin.calculate_statistics()
+        if self._calculator_plugin.calculate_statistics():
+            report_file = QFileDialog.getSaveFileName(self, 'Tallenna raportti tiedosto')[0] + '.html'
+            print(report_file)
+            self._calculator_plugin.saveReport(report_file)
 
 
 
