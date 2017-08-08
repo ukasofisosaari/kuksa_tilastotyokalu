@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 
 from StatisticsCalculatorBase import StatisticsCalculatorBase
-import xlrd
+
 
 class ZipCodeHistogram(StatisticsCalculatorBase):
     """
@@ -129,15 +129,6 @@ class ZipCodeHistogram(StatisticsCalculatorBase):
             out[i] = si
 
         return out
-
-    #Override
-    def loadExcelFile(self, excelfile):
-        # open the excel
-        #path = "jaakonsamoojat.xlsx"
-        print("Loading file {0} into xlrd".format(excelfile))
-        self._book = xlrd.open_workbook(excelfile)
-
-
 
 
 def registerCalculatorPlugin():

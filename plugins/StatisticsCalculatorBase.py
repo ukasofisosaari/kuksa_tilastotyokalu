@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
+import xlrd
 
 """
 Note that any classes inherited from StatisticsCalculatorBase must have in the same python module a function called registerCalculatorPlugin.
@@ -32,7 +33,10 @@ class StatisticsCalculatorBase(object):
 
     ##TODO: Insert excel file handling here
     def loadExcelFile(self, excelfile):
-        print(excelfile)
+        # open the excel
+        # path = "jaakonsamoojat.xlsx"
+        print("Loading file {0} into xlrd".format(excelfile))
+        self._book = xlrd.open_workbook(excelfile)
 
     @abstractmethod
     def calculate_statistics(self, parameters=[]):
