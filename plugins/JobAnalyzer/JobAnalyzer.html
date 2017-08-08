@@ -5,34 +5,21 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-<title>Example</title>
+<title>Pesti analyysi</title>
 
 </head>
 <body>
-<H1> Kuormitus</H1>
+<H1> Pesti Analyysi</H1>
+
 <canvas id="kuva1" width="200" height="200"></canvas>
 <script>
 var ctx = document.getElementById("kuva1").getContext('2d');
+ctx.height = 500;
 var myChart = new Chart(ctx, {
     type: 'horizontalBar',
     data: {
-        labels: [<ZIPS>],
-        datasets: [{
-			label: "Alle 15 vuotiaat",
-            data: [<FIRST AGE GROUP>],
-            backgroundColor: "rgba(63,103,126,1)",
-            hoverBackgroundColor: "rgba(50,90,100,1)"
-        },{
-			label: "15-22 vuotiaat",
-            data: [<SECOND AGE GROUP>],
-            backgroundColor: "rgba(163,103,126,1)",
-            hoverBackgroundColor: "rgba(140,85,100,1)"
-        },{
-			label: "Yli 22 vuotiaat",
-            data: [<THIRD AGE GROUP>],
-            backgroundColor: "rgba(63,203,226,1)",
-            hoverBackgroundColor: "rgba(46,185,235,1)"
-        },]
+        labels: [<PERSONS>],
+        datasets: [<JOBS>]
     },
     options: {
         scales: {
@@ -41,7 +28,7 @@ var myChart = new Chart(ctx, {
                     fontFamily: "'Open Sans Bold', sans-serif",
 					fontSize:11
                 },
-				
+
 				stacked: true
             }],
 			xAxes : [{
@@ -51,16 +38,17 @@ var myChart = new Chart(ctx, {
 					fontSize:11
 				},
 				scaleLabel:{
-					display:false
+					display:true,
+					labelString: 'Palvelusvuodet'
 				},
 				gridLines: {
-				}, 
+				},
 				stacked: true
 			}]
         },
 		legend:{
         display:true,
-		
+
 		},
 		animation: {
         onComplete: function () {
@@ -86,8 +74,5 @@ var myChart = new Chart(ctx, {
     },
 });
 </script>
-
-
-<H1> Pesti kesto</H1>
 </body>
 </html>
