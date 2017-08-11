@@ -20,3 +20,7 @@ Compile windows installer with python setup.py bdist_msi
 
 Note that this has been confirmed to work with the listed version numbers.
 
+
+= Usage =
+TestStatisticsCalculator is an example plugin, but it does not do any meaningful calculations
+

@@ -9,7 +9,7 @@ class TestStatisticsCalculator(StatisticsCalculatorBase):
     Test Statistics class
     """
     def __init__(self):
-        StatisticsCalculatorBase.__init__(self, "Test Statistics Calculator", "plugins/test.html")
+        StatisticsCalculatorBase.__init__(self, "Test Statistics Calculator", "plugins/TestStatisticsCalculator/TestStatisticsCalculator.cfg")
 
     def calculate_statistics(self, parameters=[]):
         print("This is a test class")

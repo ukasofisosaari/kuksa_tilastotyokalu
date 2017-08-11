@@ -4,12 +4,12 @@
 from StatisticsCalculatorBase import StatisticsCalculatorBase
 
 
-class TestStatisticsCalculator(StatisticsCalculatorBase):
+class JobAnalyzer(StatisticsCalculatorBase):
     """
     Test Statistics class
     """
     def __init__(self):
-        StatisticsCalculatorBase.__init__(self, "Test Statistics Calculator", "plugins/JobAnalyzer/JobAnalyzer.html")
+        StatisticsCalculatorBase.__init__(self, "Test Statistics Calculator", "plugins/JobAnalyzer/JobAnalyzer.cfg")
 
     def calculate_statistics(self, parameters=[]):
         print("This is a test class")
@@ -27,4 +27,4 @@ class TestStatisticsCalculator(StatisticsCalculatorBase):
 
 
 def registerCalculatorPlugin():
-    return TestStatisticsCalculator
+    return JobAnalyzer

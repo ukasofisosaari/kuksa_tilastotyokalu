@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
 import xlrd
+import configparser
 """
 Note that any classes inherited from StatisticsCalculatorBase must have in the same python module a function called registerCalculatorPlugin.
 
@@ -9,10 +10,14 @@ Note that any classes inherited from StatisticsCalculatorBase must have in the s
 class StatisticsCalculatorBase(object):
     __metaclass__ = ABCMeta
 
-    def __init__(self, plugin_name, report_template):
+    def __init__(self, plugin_name, config_file):
 
         self._name = plugin_name
         self._description = ''
+        self._config = configparser.ConfigParser()
+        self._config.read(config_file)
+        report_template = self._config.get('General', 'report_template')
+
         with open(report_template, 'r') as template_file:
             self._template_file_content = template_file.read().replace('\n', '')
 
@@ -56,3 +61,6 @@ class StatisticsCalculatorBase(object):
     @abstractmethod
     def calculate_statistics(self, parameters=[]):
         assert(False)
+
+def registerCalculatorPlugin():
+    return None

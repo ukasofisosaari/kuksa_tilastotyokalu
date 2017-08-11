@@ -62,15 +62,16 @@ class GUIStatisticsTool(QWidget):
             fname, ext = os.path.splitext(f)
             if ext == '.py':
                 mod = __import__(fname)
-                try:
-                    plugin_object = mod.registerCalculatorPlugin()()
+                print(mod)
+                print(fname)
+                plugin_register_function = mod.registerCalculatorPlugin()
+                if plugin_register_function:
+                    plugin_object = plugin_register_function()
                     print(plugin_object)
                     print(plugin_object.getName())
                     print(plugin_object.getDescription())
                     print(plugin_object.return_parameters())
                     self._plugins_available[plugin_object.getName()] = plugin_object
-                except AttributeError:
-                    pass
 
 
 

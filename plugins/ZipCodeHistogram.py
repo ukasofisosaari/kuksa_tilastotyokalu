@@ -9,7 +9,7 @@ class ZipCodeHistogram(StatisticsCalculatorBase):
     Test Statistics class
     """
     def __init__(self):
-        StatisticsCalculatorBase.__init__(self, "Zip Code Histogram", "plugins/ZipCodeHistogram/ZipCodeHistogram.html")
+        StatisticsCalculatorBase.__init__(self, "Zip Code Histogram", "plugins/ZipCodeHistogram/ZipCodeHistogram.cfg")
 
     def calculate_statistics(self, parameters=[]):
         print("Lets start calculating")
