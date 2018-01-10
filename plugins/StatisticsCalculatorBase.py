@@ -24,6 +24,17 @@ class StatisticsCalculatorBase(object):
         #Holds raw data
         self._data = ''
 
+    def checkFirstRow(self, labelIndexes, listOfFirstRow):
+        i=0
+        for label in listOfFirstRow:
+            try:
+                labelIndexes[label] = i
+                i += 1
+            except KeyError:
+                raise Error
+
+
+
     def getName(self):
         print("Called Get Name")
         return self._name
