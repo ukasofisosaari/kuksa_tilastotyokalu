@@ -31,7 +31,7 @@ class StatisticsCalculatorBase(object):
                 labelIndexes[label] = i
                 i += 1
             except KeyError:
-                raise Error
+                raise Exception("Problem with label: " + label)
 
 
 
