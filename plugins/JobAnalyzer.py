@@ -13,12 +13,7 @@ DISCTRICT_JOBS = ('Lippukunnanjohtaja',
                  'Piirin lpk-postin saaja',
                  'Pestijohtaja',
                  'Joku testi joka varmasti puuttuu')
-PESTI_DESCRIPTION_JS = """{
-        	label: "<PESTI>",
-            data: <DATA_ARRAY>,
-            backgroundColor: "rgba(63,103,126,1)",
-            hoverBackgroundColor: "rgba(50,90,100,1)"
-        }"""
+
 
 
 class JobAnalyzer(StatisticsCalculatorBase):
@@ -192,45 +187,6 @@ class JobAnalyzer(StatisticsCalculatorBase):
             i += 1
         print(json.dumps(list(outputdict.values())))
         print(json.dumps(",".join(persons_array)))
-
-        jobs_js = []
-        i = 0
-        for person in jobs.keys():
-            for person_pesti in jobs[person].keys():
-                if person_pesti in DISCTRICT_JOBS:
-                    data_array = "["
-                    for j in range(0, n_persons):
-                        if j == i:
-                            data_array += '1,'
-                        else:
-                            data_array += '0,'
-                    data_array = data_array[:-1]+"]"
-                    pesti_js_desc_tmp = PESTI_DESCRIPTION_JS.replace("<PESTI>", person_pesti)
-                    pesti_js_desc_tmp = pesti_js_desc_tmp.replace("<DATA_ARRAY>", data_array)
-                    jobs_js.append(pesti_js_desc_tmp)
-
-
-
-                #PESTI_DESCRIPTION_JS = """{
-                #        	label: "<PESTI>",
-                #            data: <DATA_ARRAY>,
-                #            backgroundColor: "rgba(63,103,126,1)",
-                #            hoverBackgroundColor: "rgba(50,90,100,1)"
-                #        }"""
-
-            i += 1
-
-
-
-        #Kuva 1
-        #Henkilö placeholder on <PERSONS>, pitää näyttää tältä: 'Saku', 'Tero', 'Olli'
-        #Alla esimerkki datasetistä mitä pitää insertoida. PLACEHOLDER on <JOB>
-        #{
-        #	label: "Lippukunnanjohtajat",
-        #    data: [1,0,0],
-        #   backgroundColor: "rgba(63,103,126,1)",
-        #    hoverBackgroundColor: "rgba(50,90,100,1)"
-        #},
         print("DONE")
         self._replacePlaceholder("<PERSONS>", ",".join(persons_array))
         self._replacePlaceholder("<JOBS>", json.dumps(list(outputdict.values())))
