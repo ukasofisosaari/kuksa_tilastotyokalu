@@ -19,7 +19,7 @@ class StatisticsCalculatorBase(object):
         report_template = self._config.get('General', 'report_template')
 
         with open(report_template, 'r') as template_file:
-            self._template_file_content = template_file.read().replace('\n', '')
+            self._template_file_content = template_file.read()
 
         #Holds raw data
         self._data = ''

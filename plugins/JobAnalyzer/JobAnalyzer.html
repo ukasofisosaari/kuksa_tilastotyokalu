@@ -1,78 +1,78 @@
 <!DOCTYPE html>
 <html>
-<head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-<title>Pesti analyysi</title>
+        <title>Pesti analyysi</title>
 
-</head>
-<body>
-<H1> Pesti Analyysi</H1>
+    </head>
+    <body>
+        <H1> Pesti Analyysi</H1>
 
-<canvas id="kuva1" width="200" height="200"></canvas>
-<script>
-var ctx = document.getElementById("kuva1").getContext('2d');
-ctx.height = 500;
-var myChart = new Chart(ctx, {
-    type: 'horizontalBar',
-    data: {
-        labels: [<PERSONS>],
-        datasets: [<JOBS>]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    fontFamily: "'Open Sans Bold', sans-serif",
-					fontSize:11
+        <canvas id="kuva1" width="200" height="200"></canvas>
+        <script>
+            var ctx = document.getElementById("kuva1").getContext('2d');
+            ctx.height = 500;
+            var myChart = new Chart(ctx, {
+                type: 'horizontalBar',
+                data: {
+                    labels: [<PERSONS>],
+                    datasets: <JOBS>
                 },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                fontFamily: "'Open Sans Bold', sans-serif",
+                                fontSize:11
+                            },
 
-				stacked: true
-            }],
-			xAxes : [{
-				ticks: {
-					beginAtZero:true,
-					fontFamily: "'Open Sans Bold', sans-serif",
-					fontSize:11
-				},
-				scaleLabel:{
-					display:true,
-					labelString: 'Palvelusvuodet'
-				},
-				gridLines: {
-				},
-				stacked: true
-			}]
-        },
-		legend:{
-        display:true,
+                            stacked: true
+                        }],
+                        xAxes : [{
+                            ticks: {
+                                beginAtZero:true,
+                                fontFamily: "'Open Sans Bold', sans-serif",
+                                fontSize:11
+                            },
+                            scaleLabel:{
+                                display:true,
+                                labelString: 'Palvelusvuodet'
+                            },
+                            gridLines: {
+                            },
+                            stacked: true
+                        }]
+                    },
+                    legend:{
+                    display:true,
 
-		},
-		animation: {
-        onComplete: function () {
-            var chartInstance = this.chart;
-            var ctx = chartInstance.ctx;
-            ctx.textAlign = "left";
-            ctx.font = "9px Open Sans";
-            ctx.fillStyle = "#fff";
+                    },
+                    animation: {
+                    onComplete: function () {
+                        var chartInstance = this.chart;
+                        var ctx = chartInstance.ctx;
+                        ctx.textAlign = "left";
+                        ctx.font = "9px Open Sans";
+                        ctx.fillStyle = "#fff";
 
-            Chart.helpers.each(this.data.datasets.forEach(function (dataset, i) {
-                var meta = chartInstance.controller.getDatasetMeta(i);
-                Chart.helpers.each(meta.data.forEach(function (bar, index) {
-                    data = dataset.data[index];
-                    if(i==0){
-                        ctx.fillText(data, 50, bar._model.y+4);
-                    } else {
-                        ctx.fillText(data, bar._model.x-25, bar._model.y+4);
+                        Chart.helpers.each(this.data.datasets.forEach(function (dataset, i) {
+                            var meta = chartInstance.controller.getDatasetMeta(i);
+                            Chart.helpers.each(meta.data.forEach(function (bar, index) {
+                                data = dataset.data[index];
+                                if(i==0){
+                                    ctx.fillText(data, 50, bar._model.y+4);
+                                } else {
+                                    ctx.fillText(data, bar._model.x-25, bar._model.y+4);
+                                }
+                            }),this)
+                        }),this);
                     }
-                }),this)
-            }),this);
-        }
-    }
-    },
-});
-</script>
-</body>
+                }
+                },
+            });
+        </script>
+    </body>
 </html>

@@ -4,8 +4,21 @@
 import xlrd
 import datetime
 from datetime import date
+import json
 
 from StatisticsCalculatorBase import StatisticsCalculatorBase
+
+DISCTRICT_JOBS = ('Lippukunnanjohtaja',
+                 'Ohjelmajohtaja',
+                 'Piirin lpk-postin saaja',
+                 'Pestijohtaja',
+                 'Joku testi joka varmasti puuttuu')
+PESTI_DESCRIPTION_JS = """{
+        	label: "<PESTI>",
+            data: <DATA_ARRAY>,
+            backgroundColor: "rgba(63,103,126,1)",
+            hoverBackgroundColor: "rgba(50,90,100,1)"
+        }"""
 
 
 class JobAnalyzer(StatisticsCalculatorBase):
@@ -14,6 +27,7 @@ class JobAnalyzer(StatisticsCalculatorBase):
     """
     def __init__(self):
         StatisticsCalculatorBase.__init__(self, "Pestitesti", "plugins/JobAnalyzer/JobAnalyzer.cfg")
+
 
     def calculate_statistics(self, parameters=[]):
         print("This calculator computes the persons who currently have posts and the duration of the active posts.")
@@ -34,11 +48,7 @@ class JobAnalyzer(StatisticsCalculatorBase):
         now = datetime.datetime.now()
         today = date(now.year, now.month, now.day)
         # district required posts
-        district_jobs = ('Lippukunnanjohtaja',
-                         'Ohjelmajohtaja',
-                         'Piirin lpk-postin saaja',
-                         'Pestijohtaja',
-                         'Joku testi joka varmasti puuttuu')
+
 
         # get the member IDs in the post list and make two versions of it: unique and values
         sheet = self._book.sheet_by_index(0)
@@ -92,20 +102,22 @@ class JobAnalyzer(StatisticsCalculatorBase):
             if has_jobs:
                 active_jobs[name] = member_jobs
 
-        #print(active_jobs)
+        self._formJobsArray(active_jobs)
+
+        print(active_jobs)
 
         # ** check the list of posts that are required by the scout district
         required_jobs_covered = []
         required_jobs_missing = []
         # loop for covered posts
-        for i in range(len(district_jobs)):
+        for i in range(len(DISCTRICT_JOBS)):
             for key in active_jobs:
-                if district_jobs[i] in active_jobs[key]:
-                    required_jobs_covered.append(district_jobs[i])
+                if DISCTRICT_JOBS[i] in active_jobs[key]:
+                    required_jobs_covered.append(DISCTRICT_JOBS[i])
         # loop for missing posts
-        for i in range(len(district_jobs)):
-            if district_jobs[i] not in required_jobs_covered:
-                required_jobs_missing.append(district_jobs[i])
+        for i in range(len(DISCTRICT_JOBS)):
+            if DISCTRICT_JOBS[i] not in required_jobs_covered:
+                required_jobs_missing.append(DISCTRICT_JOBS[i])
 
         print('Seuraavat pestit on hoidossa:')
         print(required_jobs_covered)
@@ -134,6 +146,8 @@ class JobAnalyzer(StatisticsCalculatorBase):
         print('Kaikkien aikojen lippukuntalainen:')
         print(max_years_member)
 
+        #self._replacePlaceholder("<ZIPS>", zips_s)
+
         return active_jobs, max_years_member, required_jobs_covered, required_jobs_missing
 
     def _yearsfromtodayfromexcel(self, d, today, datemode):
@@ -148,15 +162,78 @@ class JobAnalyzer(StatisticsCalculatorBase):
             out.append(delta.days / 365)
         return out
 
+    def _getAllJobTypes(self, jobs):
+        job_types = []
+        for person in jobs.keys():
+            for pesti in jobs[person].keys():
+                if pesti not in job_types:
+                    job_types.append(pesti)
+
+        return job_types
+
+    def _formJobsArray(self, jobs):
+        job_types = self._getAllJobTypes(jobs)
+        n_persons = len(jobs.keys())
+        outputdict = {}
+
+        for i in range(0, len(job_types)):
+            job_typeDict = {}
+            job_typeDict['label'] = job_types[i]
+            job_typeDict['data'] = [0] * n_persons
+            job_typeDict['backgroundColor'] = "rgba({0},{1},{2},1)".format(int(10+10*i/2), int(10+4*i/2), int(10+16*i/2) )
+            job_typeDict['hoverBackgroundColor'] = "rgba({0},{1},{2},1)".format(int(25+10*i/2), int(25+4*i/2), int(25+16*i/2) )
+            outputdict[job_types[i]] = job_typeDict
+        persons_array = []
+        i = 0
+        for person in jobs.keys():
+            persons_array.append("'{0}'".format(person))
+            for persons_pesti in jobs[person].keys():
+                outputdict[persons_pesti]['data'][i] += 1
+            i += 1
+        print(json.dumps(list(outputdict.values())))
+        print(json.dumps(",".join(persons_array)))
+
+        jobs_js = []
+        i = 0
+        for person in jobs.keys():
+            for person_pesti in jobs[person].keys():
+                if person_pesti in DISCTRICT_JOBS:
+                    data_array = "["
+                    for j in range(0, n_persons):
+                        if j == i:
+                            data_array += '1,'
+                        else:
+                            data_array += '0,'
+                    data_array = data_array[:-1]+"]"
+                    pesti_js_desc_tmp = PESTI_DESCRIPTION_JS.replace("<PESTI>", person_pesti)
+                    pesti_js_desc_tmp = pesti_js_desc_tmp.replace("<DATA_ARRAY>", data_array)
+                    jobs_js.append(pesti_js_desc_tmp)
+
+
+
+                #PESTI_DESCRIPTION_JS = """{
+                #        	label: "<PESTI>",
+                #            data: <DATA_ARRAY>,
+                #            backgroundColor: "rgba(63,103,126,1)",
+                #            hoverBackgroundColor: "rgba(50,90,100,1)"
+                #        }"""
+
+            i += 1
+
+
+
         #Kuva 1
         #Henkilö placeholder on <PERSONS>, pitää näyttää tältä: 'Saku', 'Tero', 'Olli'
         #Alla esimerkki datasetistä mitä pitää insertoida. PLACEHOLDER on <JOB>
         #{
-		#	label: "Lippukunnanjohtajat",
+        #	label: "Lippukunnanjohtajat",
         #    data: [1,0,0],
         #   backgroundColor: "rgba(63,103,126,1)",
         #    hoverBackgroundColor: "rgba(50,90,100,1)"
         #},
+        print("DONE")
+        self._replacePlaceholder("<PERSONS>", ",".join(persons_array))
+        self._replacePlaceholder("<JOBS>", json.dumps(list(outputdict.values())))
 
 
 
