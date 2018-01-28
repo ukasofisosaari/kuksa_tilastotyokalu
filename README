@@ -1,26 +1,21 @@
-Below are required tools to run this from source:
-* Python 3.5
+Confirmed to work with the following setup.
+* Python 3.6
 * PyQt5
 * Windows 10
 
-1. Install Python from an executable binary
-2. From command prompt on Windows run pip install PyQt5.
-3. Run python main.py
-
 From pip:
 pyqt5
-cx_freeze
+
 xlrd
 
-For standalone package you also need:
-* cx_Freeze
- 1. Install using pip: pip install cx_Freeze
-
+Standalone package:
+cx_Freeze from pip
 Compile windows installer with python setup.py bdist_msi
 
 Note that this has been confirmed to work with the listed version numbers.
 
 
 = Usage =
-TestStatisticsCalculator is an example plugin, but it does not do any meaningful calculations
+TestStatisticsCalculator is an example plugin, but it does not do any meaningful calculations. Copy it and its
+folder and rename to create your own plugin.
 
