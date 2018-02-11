@@ -3,5 +3,8 @@ python:
   - 3.5
 install:
   - pip install pylint pyqt5 xlrd
+before_script:
+  - cd src
+  - find . -type f -name "*py"
 script:
   - pylint *.py

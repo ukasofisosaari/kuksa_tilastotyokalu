@@ -10,8 +10,8 @@ class EventActivityCalculator(StatisticsCalculatorBase):
     """
     def __init__(self):
         StatisticsCalculatorBase.__init__(self, "Event Activity Calculator",
-                                          "plugins/event_activity_calculator/\
-                                          EventActivityCalculator.cfg")
+                                          "plugins/event_activity_calculator/"
+                                          "EventActivityCalculator.cfg")
 
     def calculate_statistics(self, parameters=None):
         """Method for calculating statistics"""

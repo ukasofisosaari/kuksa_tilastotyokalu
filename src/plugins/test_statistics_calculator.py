@@ -11,8 +11,8 @@ class TestStatisticsCalculator(StatisticsCalculatorBase):
     """
     def __init__(self):
         StatisticsCalculatorBase.__init__(self, "Test Statistics Calculator",
-                                          "plugins/test_statistics_calculator/\
-                                          TestStatisticsCalculator.cfg")
+                                          "plugins/test_statistics_calculator/"
+                                          "TestStatisticsCalculator.cfg")
 
     def calculate_statistics(self, parameters=None):
         print("This is a test class")

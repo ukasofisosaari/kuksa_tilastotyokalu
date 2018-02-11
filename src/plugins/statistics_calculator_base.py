@@ -21,6 +21,8 @@ class StatisticsCalculatorBase(object):
         self._description = ''
         self._config = configparser.ConfigParser()
         self._config.read(config_file)
+        print(config_file)
+        print(self._config)
         report_template = self._config.get('General', 'report_template')
 
         with open(report_template, 'r') as template_file:
