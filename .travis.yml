@@ -1,12 +1,7 @@
 language: python
-python: 3.5
-before_script:
-  - cd gateway
+python:
+  - 3.5
 install:
   - pip install pylint pyqt5 xlrd
 script:
   - pylint *.py
-
-notifications:
-  email:
-    - saku.rautiainen@iki.fi
