@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
+""" Module for Zip code histogram calculator"""
 
-from StatisticsCalculatorBase import StatisticsCalculatorBase
+from statistics_calculator_base import StatisticsCalculatorBase
 
 
 class ZipCodeHistogram(StatisticsCalculatorBase):
@@ -9,9 +10,10 @@ class ZipCodeHistogram(StatisticsCalculatorBase):
     Test Statistics class
     """
     def __init__(self):
-        StatisticsCalculatorBase.__init__(self, "Zip Code Histogram", "plugins/ZipCodeHistogram/ZipCodeHistogram.cfg")
+        StatisticsCalculatorBase.__init__(self, "Zip Code Histogram",
+                                          "plugins/zip_code_histogram/ZipCodeHistogram.cfg")
 
-    def calculate_statistics(self, parameters=[]):
+    def calculate_statistics(self, parameters=None):
         print("Lets start calculating")
         # Kuksa dependent indices
         vertical_offset = 4  # number of non data rows
@@ -49,13 +51,13 @@ class ZipCodeHistogram(StatisticsCalculatorBase):
 
         # convert dates to ages
         ages = []
-        for i in range(len(birthdates)):
+        for i in enumerate(birthdates):
             year = int(birthdates[i])
             ages.append(thisyear - year)
 
         zips, hist = self._zip_histogram(addresses, ages, age_bins)
         histogram = []
-        for i in range(len(zips)):
+        for i in enumerate(zips):
             histogram.append([zips[i], hist[i]])
 
         sorted_histogram = sorted(histogram, key=lambda zipcode: zipcode[0])
@@ -63,46 +65,49 @@ class ZipCodeHistogram(StatisticsCalculatorBase):
         first_age_group = []
         second_age_group = []
         third_age_group = []
-        for i in range(len(sorted_histogram)):
+        for i in enumerate(sorted_histogram):
             zips.append(sorted_histogram[i][0])
             first_age_group.append(sorted_histogram[i][1][0])
             second_age_group.append(sorted_histogram[i][1][1])
             third_age_group.append(sorted_histogram[i][1][2])
 
         zips_s = ','.join("'{0}'".format(str(x)) for x in zips)
-        self._replacePlaceholder("<ZIPS>", zips_s)
+        self._replace_placeholder("<ZIPS>", zips_s)
         first_s = ','.join(str(x) for x in first_age_group)
-        self._replacePlaceholder("<FIRST AGE GROUP>", first_s)
+        self._replace_placeholder("<FIRST AGE GROUP>", first_s)
         second_s = ','.join(str(x) for x in second_age_group)
-        self._replacePlaceholder("<SECOND AGE GROUP>", second_s)
+        self._replace_placeholder("<SECOND AGE GROUP>", second_s)
         third_s = ','.join(str(x) for x in third_age_group)
-        self._replacePlaceholder("<THIRD AGE GROUP>", third_s)
+        self._replace_placeholder("<THIRD AGE GROUP>", third_s)
 
         self._data = ';Postinumer;Alle 15 vuotiaat; 15-22 vuotiaat; Yli 22 vuotiaat;\n'
-        for i in range(len(zips)):
-            self._data += ';{0};{1};{2};{3};\n'.format(str(zips[i]), str(first_age_group[i]), str(second_age_group[i]), str(third_age_group[i]))
+        for i in enumerate(zips):
+            self._data += ';{0};{1};{2};{3};\n'.format(
+                str(zips[i]), str(first_age_group[i]), str(second_age_group[i]),
+                str(third_age_group[i]))
         return True
 
 
-
+    @classmethod
     # ----------------------------------------------------------------------
-    def _initialize_age_bins(self, age_bins):
+    def _initialize_age_bins(cls, age_bins):
         """
         Creates a list with 0 zeros where len(out) = len(age_bins)+1.
         """
         out = []
-        for i in range(len(age_bins) + 1):
+        for _ in enumerate(age_bins) + 1:
             out.append(0)
         return out
 
+    @classmethod
     # ----------------------------------------------------------------------
-    def _update_age_bins(self, age_bins, age_bins_limits, age):
+    def _update_age_bins(cls, age_bins, age_bins_limits, age):
         """
         Adds one (int(1)) representing age to correct bin in age_bins w.r.t. age_bins_limits
         """
         out = age_bins
         check_added = False
-        for i in range(len(age_bins_limits)):
+        for i in enumerate(age_bins_limits):
             if age <= age_bins_limits[i] and not check_added:
                 out[i] = out[i] + 1
                 check_added = True
@@ -121,7 +126,7 @@ class ZipCodeHistogram(StatisticsCalculatorBase):
         outzips = []
         outages = []
 
-        for i in range(len(zips)):
+        for i in enumerate(zips):
             if zips[i] in outzips:
                 # only update outages
                 idx = outzips.index(zips[i])
@@ -129,33 +134,36 @@ class ZipCodeHistogram(StatisticsCalculatorBase):
             else:
                 # create new entries
                 outzips.append(zips[i])
-                outages.append(self._update_age_bins(self._initialize_age_bins(age_bins), age_bins, ages[i]))
+                outages.append(self._update_age_bins(
+                    self._initialize_age_bins(age_bins), age_bins, ages[i]))
 
         return outzips, outages
 
-    def _parsefromexcel(self, s, parseorder):
+    @classmethod
+    def _parsefromexcel(cls, string_list, parseorder):
         """
         Parse strings in list to single list of desired part w.r.t. parseorder.
         """
 
-        out = s
+        out = string_list
 
-        for i in range(len(s)):
-            si = s[i].value
-            for j in range(len(parseorder)):
+        for i in enumerate(string_list):
+            string = string_list[i].value
+            for j in enumerate(parseorder):
                 parsecommands = parseorder[j]
                 parsestring = parsecommands[0]
                 parseside = parsecommands[1]
                 print("again")
                 print(parsecommands)
                 print(parsestring)
-                print(si)
-                sp = si.split(parsestring, 1)
-                si = sp[parseside]
-            out[i] = si
+                print(string)
+                string_split = string.split(parsestring, 1)
+                string = string_split[parseside]
+            out[i] = string
 
         return out
 
 
-def registerCalculatorPlugin():
+def register_calculator_plugin():
+    """Module method for registering plugin"""
     return ZipCodeHistogram

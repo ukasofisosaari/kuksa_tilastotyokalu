@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
+""" Module for definitions general to app
+"""
 
-
-statistics_calculator_plugins_dir = 'plugins/'
+STATISTICS_CALCULATOR_PLUGINS_DIR = 'plugins/'

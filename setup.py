@@ -1,17 +1,18 @@
+""" Setup file"""
 import sys
 from cx_Freeze import setup, Executable
 
 # Dependencies are automatically detected, but it might need fine tuning.
-build_exe_options = {"packages": ["os"], "excludes": ["tkinter"]}
+BUILD_EXE_OPTIONS = {"packages": ["os"], "excludes": ["tkinter"]}
 
 # GUI applications require a different base on Windows (the default is for a
 # console application).
-base = None
+BASE = None
 if sys.platform == "win32":
-    base = "Win32GUI"
+    BASE = "Win32GUI"
 
-setup(  name = "hp_tilastotyokalu",
-        version = "0.1",
-        description = "My GUI application!",
-        options = {"build_exe": build_exe_options},
-        executables = [Executable("main.py", base=base)])
+setup(name="hp_tilastotyokalu",
+      version="0.1",
+      description="My GUI application!",
+      options={"build_exe": BUILD_EXE_OPTIONS},
+      executables=[Executable("main.py", base=BASE)])

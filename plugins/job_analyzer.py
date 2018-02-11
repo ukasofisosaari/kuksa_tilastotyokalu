@@ -1,31 +1,36 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
-
-import xlrd
+""" Pesti analysaattori moduuli"""
 import datetime
 from datetime import date
 import json
+import xlrd
 
-from StatisticsCalculatorBase import StatisticsCalculatorBase
+from statistics_calculator_base import StatisticsCalculatorBase
 
 DISCTRICT_JOBS = ('Lippukunnanjohtaja',
-                 'Ohjelmajohtaja',
-                 'Piirin lpk-postin saaja',
-                 'Pestijohtaja',
-                 'Joku testi joka varmasti puuttuu')
+                  'Ohjelmajohtaja',
+                  'Piirin lpk-postin saaja',
+                  'Pestijohtaja',
+                  'Joku testi joka varmasti puuttuu')
 
 
 
 class JobAnalyzer(StatisticsCalculatorBase):
     """
-    This calculator computes the persons who currently have posts and the duration of the active posts.
+    This calculator computes the persons who currently have posts
+    and the duration of the active posts.
     """
     def __init__(self):
-        StatisticsCalculatorBase.__init__(self, "Pestitesti", "plugins/JobAnalyzer/JobAnalyzer.cfg")
+        """Init"""
+        StatisticsCalculatorBase.__init__(self, "Pestitesti",
+                                          "plugins/job_analyzer/JobAnalyzer.cfg")
 
 
-    def calculate_statistics(self, parameters=[]):
-        print("This calculator computes the persons who currently have posts and the duration of the active posts.")
+    def calculate_statistics(self, parameters=None):
+        """Metodi joka laskee statistiikan."""
+        print("This calculator computes the persons who currently have \
+        posts and the duration of the active posts.")
 
         # Kuksa dependent indices
         vertical_offset = 1  # number of non data rows
@@ -52,9 +57,9 @@ class JobAnalyzer(StatisticsCalculatorBase):
                                         end_rowx=sheet.nrows)
         members_key = set()
         members = []
-        for x in members_excel:
-            members.append(x.value)
-            members_key.add(x.value)
+        for member in members_excel:
+            members.append(member.value)
+            members_key.add(member.value)
 
 
         # get all the begin and end dates of posts, convert to years
@@ -65,7 +70,7 @@ class JobAnalyzer(StatisticsCalculatorBase):
                                          start_rowx=vertical_offset,
                                          end_rowx=sheet.nrows)
         # durations of the posts if they were to be held until today
-        durations = self._yearsfromtodayfromexcel(begindates_excel, today, self._book.datemode)
+        durations = self._years_from_to_day_from_excel(begindates_excel, today, self._book.datemode)
 
         # get the names of the posts for output
         job_names = sheet.col_slice(colx=job_name_column,
@@ -77,14 +82,15 @@ class JobAnalyzer(StatisticsCalculatorBase):
                                        end_rowx=sheet.nrows)
         # create a dictionary of the keys and names
         dict_key_name = {}
-        for i in range(len(members_excel)):
+        for i in enumerate(members_excel):
             dict_key_name[members_excel[i].value] = member_names[i].value
 
         # for each member, search all active posts and calculate their duration in years
-        # creates a dict that has second dict embedded; outer includes members' names and inner posts and durations
+        # creates a dict that has second dict embedded; outer includes members' names and
+        # inner posts and durations
         active_jobs = {}
-        for x in members_key:
-            indices = [i for i, y in enumerate(members) if y == x]
+        for member_key in members_key:
+            indices = [i for i, y in enumerate(members) if y == member_key]
             member_jobs = {}
             has_jobs = False
             name = ''
@@ -97,7 +103,7 @@ class JobAnalyzer(StatisticsCalculatorBase):
             if has_jobs:
                 active_jobs[name] = member_jobs
 
-        self._formJobsArray(active_jobs)
+        self._form_jobs_array(active_jobs)
 
         print(active_jobs)
 
@@ -105,12 +111,12 @@ class JobAnalyzer(StatisticsCalculatorBase):
         required_jobs_covered = []
         required_jobs_missing = []
         # loop for covered posts
-        for i in range(len(DISCTRICT_JOBS)):
+        for i in enumerate(DISCTRICT_JOBS):
             for key in active_jobs:
                 if DISCTRICT_JOBS[i] in active_jobs[key]:
                     required_jobs_covered.append(DISCTRICT_JOBS[i])
         # loop for missing posts
-        for i in range(len(DISCTRICT_JOBS)):
+        for i in enumerate(DISCTRICT_JOBS):
             if DISCTRICT_JOBS[i] not in required_jobs_covered:
                 required_jobs_missing.append(DISCTRICT_JOBS[i])
 
@@ -121,43 +127,47 @@ class JobAnalyzer(StatisticsCalculatorBase):
 
         # ** scout with the most duty years
         # for each member, calculate the total of the years of their posts
-        # (Note: the use of dictionary here turned out to be not used, though still left for possible further use.)
+        # (Note: the use of dictionary here turned out to be not used, though
+        # still left for possible further use.)
         member_years_of_duty = {}
         max_years = 0
         max_years_member = ''
-        for x in members_key:
-            indices = [i for i, y in enumerate(members) if y == x]
+        for member_key in members_key:
+            indices = [i for i, y in enumerate(members) if y == member_key]
             years_of_duty = 0
             for j in indices:
                 years_of_duty += durations[j]
-            member_years_of_duty[dict_key_name[x]] = round(years_of_duty,1)
+            member_years_of_duty[dict_key_name[member_key]] = round(years_of_duty, 1)
             # check if new candidate has more years than the previous candidate
             if years_of_duty > max_years:
                 # update candidate
-                max_years_member = dict_key_name[x]
-                max_years = round(years_of_duty,1)
-        max_years_member = (max_years_member,max_years)
+                max_years_member = dict_key_name[member_key]
+                max_years = round(years_of_duty, 1)
+        max_years_member = (max_years_member, max_years)
 
         print('Kaikkien aikojen lippukuntalainen:')
         print(max_years_member)
 
-        #self._replacePlaceholder("<ZIPS>", zips_s)
+        #self._replace_placeholder("<ZIPS>", zips_s)
 
         return active_jobs, max_years_member, required_jobs_covered, required_jobs_missing
 
-    def _yearsfromtodayfromexcel(self, d, today, datemode):
+    @classmethod
+    def _years_from_to_day_from_excel(cls, dates, today, datemode):
         """
         Converts the Julian date of excel and calculates how many days it is from today.
         """
         out = []
-        for i in d:
+        for i in dates:
             jnd_date = xlrd.xldate_as_tuple(i.value, datemode)
             jnd_date_datetime = date(jnd_date[0], jnd_date[1], jnd_date[2])
             delta = today - jnd_date_datetime
             out.append(delta.days / 365)
         return out
 
-    def _getAllJobTypes(self, jobs):
+    @classmethod
+    def _get_all_job_types(cls, jobs):
+        """Get all job types"""
         job_types = []
         for person in jobs.keys():
             for pesti in jobs[person].keys():
@@ -166,18 +176,21 @@ class JobAnalyzer(StatisticsCalculatorBase):
 
         return job_types
 
-    def _formJobsArray(self, jobs):
-        job_types = self._getAllJobTypes(jobs)
+    def _form_jobs_array(self, jobs):
+        """form array for report"""
+        job_types = self._get_all_job_types(jobs)
         n_persons = len(jobs.keys())
         outputdict = {}
 
-        for i in range(0, len(job_types)):
-            job_typeDict = {}
-            job_typeDict['label'] = job_types[i]
-            job_typeDict['data'] = [0] * n_persons
-            job_typeDict['backgroundColor'] = "rgba({0},{1},{2},1)".format(int(10+10*i/2), int(10+4*i/2), int(10+16*i/2) )
-            job_typeDict['hoverBackgroundColor'] = "rgba({0},{1},{2},1)".format(int(25+10*i/2), int(25+4*i/2), int(25+16*i/2) )
-            outputdict[job_types[i]] = job_typeDict
+        for i in enumerate(job_types):
+            job_type_dict = {}
+            job_type_dict['label'] = job_types[i]
+            job_type_dict['data'] = [0] * n_persons
+            job_type_dict['backgroundColor'] = "rgba({0},{1},{2},1)".format(
+                int(10+10*i/2), int(10+4*i/2), int(10+16*i/2))
+            job_type_dict['hoverBackgroundColor'] = "rgba({0},{1},{2},1)".format(
+                int(25+10*i/2), int(25+4*i/2), int(25+16*i/2))
+            outputdict[job_types[i]] = job_type_dict
         persons_array = []
         i = 0
         for person in jobs.keys():
@@ -188,10 +201,11 @@ class JobAnalyzer(StatisticsCalculatorBase):
         print(json.dumps(list(outputdict.values())))
         print(json.dumps(",".join(persons_array)))
         print("DONE")
-        self._replacePlaceholder("<PERSONS>", ",".join(persons_array))
-        self._replacePlaceholder("<JOBS>", json.dumps(list(outputdict.values())))
+        self._replace_placeholder("<PERSONS>", ",".join(persons_array))
+        self._replace_placeholder("<JOBS>", json.dumps(list(outputdict.values())))
 
 
 
-def registerCalculatorPlugin():
+def register_calculator_plugin():
+    """Module method for registering plugin"""
     return JobAnalyzer

@@ -2,16 +2,17 @@
 #-*- coding: utf-8 -*-
 
 """
-
+Main module
 """
 
 import sys
 
-
-from mainWindow import GUIStatisticsTool
 from PyQt5 import QtWidgets
 
+from main_window import GUIStatisticsTool
+
 def main():
+    """ Main function for program"""
     app = QtWidgets.QApplication(sys.argv)
 
     hello_world = GUIStatisticsTool()
