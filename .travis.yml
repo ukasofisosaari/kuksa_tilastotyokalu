@@ -6,9 +6,6 @@ install:
   - pip install pylint pyqt5 xlrd
 script:
   - pylint *.py
-branches:
-  only:
-    - master
 
 notifications:
   email:
