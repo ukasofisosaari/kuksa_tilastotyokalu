@@ -44,15 +44,18 @@ TODO
 ## Authors
 
 * **Saku Rautiainen** - *UI and architechture* - [ukasofisosaari](https://github.com/ukasofisosaari)
-* **Olli Koskela** - *Calculators* - [llkskl](https://github.com/llkskl)
+* **Olli Koskela** - *Actual statistics and calculators* - [llkskl](https://github.com/llkskl)
+* **Tero Keso** - *Project management and endless coffee* - [Caremon](https://github.com/Caremon)
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
+* Original statistics script in python by [ukasofisosaari](https://github.com/ukasofisosaari) - [Kasvu Scripts](https://github.com/ukasofisosaari/kasvu_scripts)
+* Original statistics script in matlab by [llkskl](https://github.com/llkskl) - [TODO](TODO)
 
-* **Tero Keso** - *Thanks for endless coffee* - [Caremon](https://github.com/Caremon)
+
 
 
 
